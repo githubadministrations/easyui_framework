@@ -1,0 +1,41 @@
+//
+   Created by xiangtian on 2017/1/12.
+extends ../layout
+block content
+    #myEditor
+    button.btn.btn-primary.btn-block
+        |  提交
+    script(type='text/javascript').
+        //实例化编辑器
+        var um = UM.getEditor('myEditor');
+        //um.addListener('blur',function(){
+        //  $('#focush2').html('编辑器失去焦点了')
+        //});
+        um.addListener('focus', function () {
+            $('#focush2').html('')
+        });
+        $(document).ready(function () {
+            $(".btn-primary").click(function (e) {
+                var info = $("#myEditor").html();
+                $.ajax({
+                    url: '/info/insertInfo',
+                    type: 'post',
+                    data: {info: info},
+                    success: function (data, status) {
+                        var obj = JSON.parse(data);
+                        if (status == 'success') {
+                            if (obj.code == 1) {
+                                location.href = '/users/home';
+                            } else {
+                                alert("添加失败");
+                            }
+                        }
+                    },
+                    error: function (data, status) {
+                        if (status == 'error') {
+                            alert("error");
+                        }
+                    }
+                });
+            })
+        })

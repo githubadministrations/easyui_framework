@@ -1,0 +1,54 @@
+//Created by xiangtian on 2017/1/12.
+extends ../layout
+block content
+    script(type='text/javascript').
+        $(document).ready(function () {
+            $.ajax({
+                url: '/info/query',
+                type: 'get',
+                success: function (data, status) {
+                    var arr = JSON.parse(data);
+                    if (status == 'success') {
+                        var content = "";
+                        for(var obj in arr){
+                            var info = arr[obj]
+                            console.log(info);
+                            content += "<tr>"
+                            content += "<td><a onclick=queryOne('"+info._id+"')>" + info._id + "</a></td>td>"
+                            content += "<td>" + info.info + "</td>td>"
+                            content += "<td>" + info.id + "</td>td>"
+                            content += "</tr>"
+                        }
+                        $("#mytbody").html(content);
+                    }
+                },
+                error: function (data, status) {
+                    if (status == 'error') {
+                        alert("error");
+                    }
+                }
+            });
+        })
+        function queryOne(id){
+            $.ajax({
+                url: '/info/queryOne',
+                type: 'post',
+                data: {id: id},
+                success: function (data, status) {
+
+                },
+                error: function (data, status) {
+                    if (status == 'error') {
+                        alert("error");
+                    }
+                }
+            })
+        }
+    table.table.table-bordered
+        caption 边框表格布局
+        thead
+            tr
+                th 名称
+                th 城市
+                th 邮编
+        tbody#mytbody

@@ -1,0 +1,68 @@
+extends layout
+block content
+  .p-login
+    .p-login-logo
+    .p-login-panel
+      .p-login-panel-title
+        span.fa.fa-share-alt
+        | 系统标题
+      form.p-login-panel-form.form-horizontal.clearfix(method='post' action='')
+        .col-sm-24
+          .form-group
+            label.control-label.col-sm-4 用户名
+            .col-sm-20
+              input.form-control(name='email' placeholder='用户名 / 电子邮箱')
+          .form-group
+            label.control-label.col-sm-4 密 码
+            .col-sm-20
+              input.form-control(name='password' type='password')
+          .form-group
+            label.control-label.col-sm-4
+            .col-sm-offset-4.col-sm-20
+              button.btn.btn-primary.btn-block
+               span.fa.fa-lock
+               |  登录
+    .p-login-products.clearfix
+      a.p-login-products-prev(href='javascript:void;')
+       span.fa.fa-chevron-left
+      .p-login-products-list
+        .p-login-products-list-inner
+          a(href='http://dne.gyyx.cn/' target='_blank' title='龙与精灵')
+           img(src='/images/game_png/lyjl.png')
+          a(href='http://yxlm.gyyx.cn/' target='_blank' title='最萌英雄')
+            img(src='/images/game_png/zmyx.png')
+          a(href='http://love.gyyx.cn/' target='_blank' title='爱恋都市')
+            img(src='/images/game_png/alds.png')
+          a(href='http://fl.gyyx.cn/' target='_blank' title='幻想传说FL')
+            img(src='/images/game_png/hxcs.png')
+      a.p-login-products-next(href='javascript:void;')
+        span.fa.fa-chevron-right
+    .p-login-footer Copyright &copy; 2004 - 2016 Coslight Games. All Rights Reserved.
+  script(type='text/javascript').
+    $(document).ready(function () {
+      $(".btn-primary").click(function (e) {
+        e.preventDefault();
+        var name = $("input[name='email']").val();
+        var pwd = $("input[name='password']").val();
+        $.ajax({
+          url: '/users/login',
+          type: 'post',
+          data: {email: name, pwd: pwd},
+          success: function (data, status) {
+            var obj = JSON.parse(data);
+            if(status=='success'){
+              if (obj.code == 1) {
+                location.href = 'users/insertTable';
+              }else{
+                alert("用户名或密码不正确");
+              }
+            }
+          },
+          error: function (data, status) {
+            if (status == 'error') {
+              alert("error");
+            }
+          }
+        });
+      })
+    })
